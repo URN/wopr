@@ -39,7 +39,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: ${{ github.ref == 'refs/heads/main' }}}
+          push: ${{ github.ref == 'refs/heads/main' }}
           cache-from: type=registry,ref=ghcr.io/${{ env.LOWER_REPO }}
           cache-to: type=inline
           tags: ${{ steps.docker-meta.outputs.tags }}
