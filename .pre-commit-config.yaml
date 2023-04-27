@@ -1,0 +1,35 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+
+  - repo: local
+    hooks:
+      - id: isort
+        name: isort
+        description: This hook runs isort within our project's environment.
+        entry: poetry run isort
+        language: system
+        types: [python]
+        require_serial: true
+      - id: black
+        name: black
+        description: This hook runs black within our project's environment.
+        entry: poetry run black
+        language: system
+        types: [python]
+        require_serial: true
+      - id: ruff
+        name: ruff
+        description: Run ruff linting
+        entry: poetry run ruff check --force-exclude
+        language: system
+        'types_or': [python, pyi]
+        require_serial: true
+        args: [--fix, --exit-non-zero-on-fix]

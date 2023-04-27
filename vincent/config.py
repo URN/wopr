@@ -1,10 +1,9 @@
-from typing import Optional
-
+"""Configuration for Vincent, loaded from constants and environment variables."""
 from pydantic import BaseSettings
 
 
 class Config(BaseSettings):
-    """Configuration for Vincent"""
+    """Configuration for Vincent."""
 
     token: str
 
@@ -16,9 +15,9 @@ class Config(BaseSettings):
 
     stats_url: str = "https://live.urn1350.net/status-json.xsl"
 
-    class Config:
+    class Config:  # noqa: D106
         env_file = ".env"
         env_prefix = "VINCENT_"
 
 
-CONFIG = Config()
+CONFIG = Config()  # type: ignore  # noqa: PGH003

@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-
-from typing import Optional
+"""Main entry-point for the Vincent application."""
 import logging
 import sys
 
@@ -10,15 +8,17 @@ from loguru import logger
 
 from vincent import CONFIG
 
+
 class InterceptHandler(logging.Handler):
-    def emit(self, record):
-        # Get corresponding Loguru level if it exists.
+    """Intercept existing logging handlers with Loguru."""
+
+    def emit(self, record: logging.LogRecord) -> None:
+        """Emit a log to loguru."""
         try:
             level = logger.level(record.levelname).name
         except ValueError:
             level = record.levelno
 
-        # Find caller from where originated the logged message.
         frame, depth = sys._getframe(6), 6
         while frame and frame.f_code.co_filename == logging.__file__:
             frame = frame.f_back
@@ -26,21 +26,24 @@ class InterceptHandler(logging.Handler):
 
         logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())
 
+
 logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO, force=True)
 
 MY_GUILD = discord.Object(id=CONFIG.guild_id)
 
 intents = discord.Intents.all()
-client = commands.Bot(intents=intents, command_prefix=CONFIG.prefix)
+bot = commands.Bot(intents=intents, command_prefix=CONFIG.prefix)
 
 
-@client.event
-async def on_ready():
-    logger.info("Logged in as {client.user} ({client.user.id})", client=client)
+@bot.event
+async def on_ready() -> None:
+    """Bot on-ready function to load extensions and sync commands."""
+    logger.info("Logged in as {bot.user} ({bot.user.id})", bot=bot)
 
-    await client.load_extension("vincent.exts.stream")
+    await bot.load_extension("vincent.exts.stream")
 
-    client.tree.copy_global_to(guild=MY_GUILD)
-    await client.tree.sync(guild=MY_GUILD)
+    bot.tree.copy_global_to(guild=MY_GUILD)
+    await bot.tree.sync(guild=MY_GUILD)
 
-client.run(CONFIG.token, log_handler=None)
+
+bot.run(CONFIG.token, log_handler=None)
