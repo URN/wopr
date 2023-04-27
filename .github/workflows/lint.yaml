@@ -1,0 +1,23 @@
+name: Lint
+
+on: workflow_call
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Python deps
+        uses: HassanAbouelela/actions/setup-python@setup-python_v1.4.0
+        with:
+          python_version: "3.10"
+
+      - name: Run pre-commit
+        run: SKIP=ruff pre-commit run run --all-files
+
+      # Run ruff seperately for github formatting
+      - name: Run ruff
+        run: ruff check --format=github .

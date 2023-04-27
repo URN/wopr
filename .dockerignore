@@ -1,0 +1,7 @@
+# Exclude everything
+*
+
+# Makes exceptions for what is needed
+!vincent
+!pyproject.toml
+!LICENSE
