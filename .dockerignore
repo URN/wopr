@@ -4,4 +4,5 @@
 # Makes exceptions for what is needed
 !vincent
 !pyproject.toml
+!poetry.lock
 !LICENSE
