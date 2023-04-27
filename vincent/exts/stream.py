@@ -50,5 +50,14 @@ class Stream(commands.GroupCog):
 
                 await interaction.response.send_message(embed=embed)
 
+    @app_commands.command()
+    async def stop(self, interaction: discord.Interaction):
+        """Stop playing URN in the servers voice channel."""
+        if vc := interaction.guild.voice_client:
+            await vc.disconnect()
+            await interaction.response.send_message(":white_check_mark: Leaving voice, goodbye!")
+        else:
+            await interaction.response.send_message(":x: Not in a voice channel!")
+
 async def setup(bot):
     await bot.add_cog(Stream(bot))
