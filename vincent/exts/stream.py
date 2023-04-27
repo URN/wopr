@@ -1,3 +1,4 @@
+"""Utilities for working with Icecast."""
 from datetime import datetime
 
 import aiohttp
@@ -21,11 +22,13 @@ class Stream(commands.GroupCog):
         interaction: discord.Interaction,
         channel: discord.VoiceChannel | discord.StageChannel | None = None,
     ) -> None:
-        """Join a channel and play URN!"""
-        if not channel:
-            if isinstance(interaction.user, discord.Member):
-                if vs := interaction.user.voice:
-                    channel = vs.channel
+        """Join a channel and play URN."""
+        if (
+            not channel
+            and isinstance(interaction.user, discord.Member)
+            and (vs := interaction.user.voice)
+        ):
+            channel = vs.channel
 
         if not channel:
             await interaction.response.send_message(":x: Join a voice channel first!")
@@ -85,5 +88,5 @@ class Stream(commands.GroupCog):
 
 
 async def setup(bot: commands.Bot) -> None:
-    """Setup the stream cog."""
+    """Set up the stream cog."""
     await bot.add_cog(Stream(bot))
