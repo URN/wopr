@@ -1,16 +1,12 @@
 """Utilities for importing assets."""
-from datetime import datetime
-
-import aiohttp
-import discord
-import humanize
 import tempfile
-import pyfsig
+
+import discord
 import requests
 from discord import app_commands
 from discord.ext import commands
 
-from wopr import CONFIG
+
 
 @app_commands.guild_only()
 class Assets(commands.GroupCog):
@@ -25,8 +21,7 @@ class Assets(commands.GroupCog):
         interaction: discord.Interaction,
         attachment: str,
     ) -> None:
-        """Downloads attachment and adds to Zetta mount"""
-
+        """Downloads attachment and adds to Zetta mount."""
         temp = tempfile.TemporaryFile()
 
         if attachment.startswith("https://cdn.discordapp.com"):
@@ -36,6 +31,7 @@ class Assets(commands.GroupCog):
 
         else:
             interaction.response.send_message(":x: Please submit a Discord attachment link")
+
 
 async def setup(bot: commands.Bot) -> None:
     """Set up the stream cog."""
