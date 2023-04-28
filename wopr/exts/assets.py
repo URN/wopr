@@ -20,11 +20,11 @@ class Assets(commands.GroupCog):
         interaction: discord.Interaction,
         attachment: str,
     ) -> None:
-        """Downloads attachment and adds to Zetta mount."""
+        """Download an attachment and adds it to Zetta mount."""
         temp = tempfile.TemporaryFile()
 
         if attachment.startswith("https://cdn.discordapp.com"):
-            temp.write(requests.get(attachment).content)
+            temp.write(requests.get(attachment, timeout=5).content)
             temp.close()
             interaction.response.send_message("This is a correct link")
 
