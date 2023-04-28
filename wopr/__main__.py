@@ -52,7 +52,7 @@ async def on_ready() -> None:
     bot.start_time = datetime.now(tz=timezone.utc)
 
     for file in Path("wopr/exts").glob("*.py"):
-        bot.load_extension(f"wopr.exts.{file.stem}")
+        await bot.load_extension(f"wopr.exts.{file.stem}")
 
     bot.tree.copy_global_to(guild=MY_GUILD)
     await bot.tree.sync(guild=MY_GUILD)
