@@ -57,5 +57,5 @@ jobs:
           SSH_KEY: ${{ secrets.DEPLOYMENT_SSH_KEY }}
           SSH_HOST: ${{ secrets.DEPLOYMENT_HOST }}
 
-      - name: Stop the server
+      - name: Deploy to deployment host
         run: ssh production
