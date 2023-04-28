@@ -17,8 +17,15 @@ class Extensions(commands.GroupCog):
     @app_commands.command()
     async def load(self, interaction: discord.Interaction, extension: str) -> None:
         """Load an extension."""
-        await self.bot.load_extension(f"wopr.exts.{extension}")
-        await interaction.response.send_message(f":white_check_mark: Loaded {extension}!")
+        try:
+            await self.bot.load_extension(f"wopr.exts.{extension}")
+            await interaction.response.send_message(f":white_check_mark: Loaded `{extension}`!")
+        except commands.ExtensionAlreadyLoaded:
+            await interaction.response.send_message(f":x: `{extension}` is already loaded!")
+        except commands.ExtensionNotFound:
+            await interaction.response.send_message(f":x: `{extension}` not found!")
+        except commands.ExtensionFailed as e:
+            await interaction.response.send_message(f":x: `{extension}` failed to load: {e}")
 
     @load.autocomplete("extension")
     async def ext_load_autocomplete(
@@ -34,14 +41,24 @@ class Extensions(commands.GroupCog):
     @app_commands.command()
     async def unload(self, interaction: discord.Interaction, extension: str) -> None:
         """Unload an extension."""
-        await self.bot.unload_extension(f"wopr.exts.{extension}")
-        await interaction.response.send_message(f":white_check_mark: Unloaded {extension}!")
+        try:
+            await self.bot.unload_extension(f"wopr.exts.{extension}")
+            await interaction.response.send_message(f":white_check_mark: Unloaded `{extension}`!")
+        except (commands.ExtensionNotFound, commands.ExtensionNotLoaded):
+            await interaction.response.send_message(f":x: `{extension}` not found!")
 
     @app_commands.command()
     async def reload(self, interaction: discord.Interaction, extension: str) -> None:
         """Reload an extension."""
-        await self.bot.reload_extension(f"wopr.exts.{extension}")
-        await interaction.response.send_message(f":white_check_mark: Reloaded {extension}!")
+        try:
+            await self.bot.reload_extension(f"wopr.exts.{extension}")
+            await interaction.response.send_message(f":white_check_mark: Reloaded `{extension}`!")
+        except commands.ExtensionNotLoaded:
+            await interaction.response.send_message(f":x: `{extension}` is not loaded!")
+        except commands.ExtensionNotFound:
+            await interaction.response.send_message(f":x: `{extension}` not found!")
+        except commands.ExtensionFailed as e:
+            await interaction.response.send_message(f":x: `{extension}` failed to load: {e}")
 
     @reload.autocomplete("extension")
     @unload.autocomplete("extension")
