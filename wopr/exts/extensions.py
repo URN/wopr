@@ -14,6 +14,10 @@ class Extensions(commands.GroupCog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        """Check if the user is an administrator."""
+        return interaction.user.id in self.bot.owner_ids
+
     @app_commands.command()
     async def load(self, interaction: discord.Interaction, extension: str) -> None:
         """Load an extension."""
