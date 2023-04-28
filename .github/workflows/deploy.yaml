@@ -43,4 +43,4 @@ jobs:
 
       - name: Test host is up
         run: |
-            ping -c 1 10.144.95.81
+            ping -c 1 hypervisor.zebra-catfish.ts.net
