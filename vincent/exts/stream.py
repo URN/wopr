@@ -3,6 +3,7 @@ from datetime import datetime
 
 import aiohttp
 import discord
+import humanize
 from discord import app_commands
 from discord.ext import commands
 
@@ -70,6 +71,8 @@ class Stream(commands.GroupCog):
                     "Stream Start": discord.utils.format_dt(stream_start, style="R"),
                     "Server Start": discord.utils.format_dt(server_start, style="R"),
                     "Server Version": data["server_id"],
+                    "Total Bytes Sent": humanize.naturalsize(source["total_bytes_sent"]),
+                    "Total Bytes Read": humanize.naturalsize(source["total_bytes_read"]),
                 }
 
                 for field, value in fields.items():
