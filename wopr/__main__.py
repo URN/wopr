@@ -58,7 +58,7 @@ async def on_ready() -> None:
     bot.tree.copy_global_to(guild=MY_GUILD)
     await bot.tree.sync(guild=MY_GUILD)
 
-    for owner in await bot.application_info().team.members:
+    for owner in (await bot.application_info()).team.members:
         bot.owners.append(owner.id)
 
 
