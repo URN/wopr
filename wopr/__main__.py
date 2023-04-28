@@ -1,12 +1,15 @@
 """Main entry-point for the WOPR application."""
 import logging
 import sys
+from datetime import datetime, timezone
 
 import discord
 from discord.ext import commands
 from loguru import logger
 
 from wopr import CONFIG
+
+MY_GUILD = discord.Object(id=CONFIG.guild_id)
 
 
 class InterceptHandler(logging.Handler):
@@ -27,18 +30,24 @@ class InterceptHandler(logging.Handler):
         logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())
 
 
+class BotBase(commands.Bot):
+    """A base class for the bot to allow for custom attributes."""
+
+    start_time: datetime
+
+
 logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO, force=True)
 
-MY_GUILD = discord.Object(id=CONFIG.guild_id)
-
 intents = discord.Intents.all()
-bot = commands.Bot(intents=intents, command_prefix=CONFIG.prefix)
+bot = BotBase(intents=intents, command_prefix=CONFIG.prefix)
 
 
 @bot.event
 async def on_ready() -> None:
     """Bot on-ready function to load extensions and sync commands."""
     logger.info("Logged in as {bot.user} ({bot.user.id})", bot=bot)
+
+    bot.start_time = datetime.now(tz=timezone.utc)
 
     await bot.load_extension("wopr.exts.stream")
 
@@ -50,6 +59,14 @@ async def on_ready() -> None:
 async def ping(interaction: discord.Interaction) -> None:
     """Ping the bot."""
     await interaction.response.send_message("Pong! :ping_pong:")
+
+
+@bot.tree.command()
+async def uptime(interaction: discord.Interaction) -> None:
+    """Fetch the uptime of the bot."""
+    await interaction.response.send_message(
+        f"Uptime: {discord.utils.format_dt(bot.start_time, style='R')}"
+    )
 
 
 bot.run(CONFIG.token, log_handler=None)
