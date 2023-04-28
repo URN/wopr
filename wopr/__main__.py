@@ -35,7 +35,7 @@ class BotBase(commands.Bot):
     """A base class for the bot to allow for custom attributes."""
 
     start_time: datetime
-    owners: list[int]
+    owners: list[int] = []
 
 
 logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO, force=True)
