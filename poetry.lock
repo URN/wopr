@@ -912,6 +912,17 @@ dotenv = ["python-dotenv (>=0.10.4)"]
 email = ["email-validator (>=1.0.3)"]
 
 [[package]]
+name = "pyfsig"
+version = "0.6"
+description = "A python library for identifying files by headers (magic bytes)"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pyfsig-0.6.tar.gz", hash = "sha256:90f01712a24e5b04a185565723c39f577e1884096d951deabe335ab81806552a"},
+]
+
+[[package]]
 name = "pynacl"
 version = "1.5.0"
 description = "Python binding to the Networking and Cryptography (NaCl) library"
@@ -1228,4 +1239,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f3b2d8c402cb95492e013f052e9f56196f40537c7f87069cc5c320ac7b2a1fd8"
+content-hash = "c19e81d7ec22d98d0ec9cc3bba07ef4e1e3802e7fe5b7421cff9516260e8e150"
