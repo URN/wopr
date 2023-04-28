@@ -4,6 +4,7 @@ on: workflow_call
 
 jobs:
   lint:
+    name: Lint code with Pre-Commit & Ruff
     runs-on: ubuntu-latest
 
     steps:
