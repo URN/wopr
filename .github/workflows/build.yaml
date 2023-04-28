@@ -22,14 +22,15 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get repo in lowercase
+        id: repo-name
         run: |
-          echo "LOWER_REPO=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+          echo "lower-repo=${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
 
       - name: Generate Docker meta data
         uses: docker/metadata-action@v4
         id: docker-meta
         with:
-          images: ghcr.io/${{ env.LOWER_REPO }}
+          images: ghcr.io/${{ steps.repo-name.outputs.lower-repo }}
           tags: |
             type=sha
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
@@ -40,6 +41,6 @@ jobs:
           context: .
           file: ./Dockerfile
           push: ${{ github.ref == 'refs/heads/main' }}
-          cache-from: type=registry,ref=ghcr.io/${{ env.LOWER_REPO }}
+          cache-from: type=registry,ref=ghcr.io/${{ steps.repo-name.outputs.lower-repo }}
           cache-to: type=inline
           tags: ${{ steps.docker-meta.outputs.tags }}
