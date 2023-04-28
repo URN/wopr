@@ -9,13 +9,16 @@ jobs:
 
     steps:
       - name: Generate Tailscale Access Token
-        run:
-            echo TAILSCALE_ACCESS=$(curl -s -d 'client_id=${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}' -d 'client_secret=${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}' https://api.tailscale.com/api/v2/oauth/token | jq -r ".access_token") >> $GITHUB_ENV
+        id: access-token
+        run: |
+            TAILSCALE_ACCESS=$(curl -s -d 'client_id=${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}' -d 'client_secret=${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}' https://api.tailscale.com/api/v2/oauth/token | jq -r ".access_token")
+            echo "::add-mask::$TAILSCALE_ACCESS"
+            echo "tailscale-access=$TAILSCALE_ACCESS" >> "$GITHUB_OUTPUT"
 
       - name: Generate Tailscale Auth Key
         id: auth-key
         run: |
-            AUTH_KEY=$(curl -X POST -H "Authorization: Bearer $TAILSCALE_ACCESS" https://api.tailscale.com/api/v2/tailnet/${{ secrets.TAILSCALE_TAILNET }}/keys \
+            AUTH_KEY=$(curl -X POST -H "Authorization: Bearer ${{ steps.access-token.outputs.tailscale-access }}" https://api.tailscale.com/api/v2/tailnet/${{ secrets.TAILSCALE_TAILNET_NAME }}/keys \
             --data-binary '
             {
             "capabilities": {
