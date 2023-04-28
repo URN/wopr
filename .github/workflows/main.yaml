@@ -14,8 +14,15 @@ jobs:
   lint:
     uses: ./.github/workflows/lint.yaml
 
-  build-deploy:
+  build:
     uses: ./.github/workflows/build.yaml
     needs:
       - lint
+    secrets: inherit
+
+  deploy:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/deploy.yaml
+    needs:
+      - build
     secrets: inherit

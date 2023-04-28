@@ -1,0 +1,36 @@
+name: Deploy
+
+on: workflow_call
+
+jobs:
+  build:
+    name: Deploy to URN Hypervisor
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate Tailscale Access Token
+        run:
+            echo TAILSCALE_ACCESS=$(curl -s -d 'client_id=${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}' -d 'client_secret=${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}' https://api.tailscale.com/api/v2/oauth/token | jq -r ".access_token") >> $GITHUB_ENV
+
+      - name: Generate Tailscale Auth Key
+        run: |
+            echo AUTH_KEY=$(curl -X POST -H "Authorization: Bearer $TAILSCALE_ACCESS" https://api.tailscale.com/api/v2/tailnet/${{ secrets.TAILSCALE_TAILNET }}/keys \
+            --data-binary '
+            {
+            "capabilities": {
+                "devices": {
+                "create": {
+                    "reusable": false,
+                    "ephemeral": true,
+                    "preauthorized": true,
+                    "tags": [ "tag:ci" ]
+                }
+                }
+            },
+            "expirySeconds": 86400
+            }' | jq -r ".key") >> $GITHUB_ENV
+
+      - name: Tailscale
+        uses: tailscale/github-action@v1
+        with:
+            authkey: ${{ env.AUTH_KEY }}
