@@ -15,7 +15,7 @@ jobs:
         uses: HassanAbouelela/actions/setup-python@setup-python_v1.4.0
         with:
           python_version: "3.10"
-          
+
       # Run ruff seperately for github formatting
       - name: Run ruff
         run: ruff check --format=github .
