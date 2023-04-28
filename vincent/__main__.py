@@ -49,7 +49,7 @@ async def on_ready() -> None:
 @bot.tree.command()
 async def ping(interaction: discord.Interaction) -> None:
     """Ping the bot."""
-    await interaction.response.send_message("Pong!")
+    await interaction.response.send_message("Pong! :ping_pong:")
 
 
 bot.run(CONFIG.token, log_handler=None)
