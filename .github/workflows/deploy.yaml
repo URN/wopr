@@ -45,12 +45,12 @@ jobs:
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_KEY" > ~/.ssh/production.key
-          chmod 600 ~/.ssh/staging.key
+          chmod 600 ~/.ssh/production.key
           cat >>~/.ssh/config <<END
           Host production
             HostName $SSH_HOST
             User root
-            IdentityFile ~/.ssh/staging.key
+            IdentityFile ~/.ssh/production.key
             StrictHostKeyChecking no
           END
         env:
