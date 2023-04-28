@@ -1,4 +1,4 @@
-"""Main entry-point for the Vincent application."""
+"""Main entry-point for the WOPR application."""
 import logging
 import sys
 
@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 from loguru import logger
 
-from vincent import CONFIG
+from wopr import CONFIG
 
 
 class InterceptHandler(logging.Handler):
@@ -40,7 +40,7 @@ async def on_ready() -> None:
     """Bot on-ready function to load extensions and sync commands."""
     logger.info("Logged in as {bot.user} ({bot.user.id})", bot=bot)
 
-    await bot.load_extension("vincent.exts.stream")
+    await bot.load_extension("wopr.exts.stream")
 
     bot.tree.copy_global_to(guild=MY_GUILD)
     await bot.tree.sync(guild=MY_GUILD)

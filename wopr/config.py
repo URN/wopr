@@ -1,9 +1,9 @@
-"""Configuration for Vincent, loaded from constants and environment variables."""
+"""Configuration for WOPR, loaded from constants and environment variables."""
 from pydantic import BaseSettings
 
 
 class Config(BaseSettings):
-    """Configuration for Vincent."""
+    """Configuration for WOPR."""
 
     token: str
 
@@ -17,7 +17,7 @@ class Config(BaseSettings):
 
     class Config:  # noqa: D106
         env_file = ".env"
-        env_prefix = "VINCENT_"
+        env_prefix = "WOPR_"
 
 
 CONFIG = Config()  # type: ignore  # noqa: PGH003

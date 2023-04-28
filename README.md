@@ -1,3 +1,3 @@
-# Vincent
+# WOPR
 
-Vincent is a Discord utility bot for the URN Tech Team.
+WOPR is a Discord utility bot for the URN Tech Team.

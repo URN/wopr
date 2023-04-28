@@ -2,7 +2,7 @@
 *
 
 # Makes exceptions for what is needed
-!vincent
+!wopr
 !pyproject.toml
 !poetry.lock
 !LICENSE

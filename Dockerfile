@@ -7,4 +7,4 @@ RUN poetry install --only main
 COPY . .
 
 ENTRYPOINT ["poetry"]
-CMD ["run", "python", "-m", "vincent"]
+CMD ["run", "python", "-m", "wopr"]

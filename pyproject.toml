@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "vincent"
+name = "wopr"
 version = "0.1.0"
 description = ""
 authors = ["Joe Banks <joe@urn1350.net>", "Chris Lovering <chris@jb3.dev>"]
@@ -28,7 +28,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.taskipy.tasks]
-start = "python -m vincent"
+start = "python -m wopr"
 lint = "pre-commit run --all-files"
 precommit = "pre-commit install"
 isort = "isort ."
