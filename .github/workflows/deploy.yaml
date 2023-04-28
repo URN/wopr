@@ -40,3 +40,7 @@ jobs:
         uses: tailscale/github-action@7bd8039bf25c23c4ab1b8d6e2cc2da2280601966
         with:
             authkey: ${{ steps.auth-key.outputs.auth-key }}
+
+      - name: Test host is up
+        run: |
+            ping -c 1 10.144.95.81
