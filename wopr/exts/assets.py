@@ -7,7 +7,6 @@ from discord import app_commands
 from discord.ext import commands
 
 
-
 @app_commands.guild_only()
 class Assets(commands.GroupCog):
     """Commands for adding assets to Zetta."""
