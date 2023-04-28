@@ -61,4 +61,4 @@ jobs:
         run: ssh production
 
       - name: Logout from Tailscale & delete ephemeral node
-        run: tailscale logout
+        run: sudo tailscale logout
