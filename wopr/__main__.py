@@ -35,6 +35,7 @@ class BotBase(commands.Bot):
     """A base class for the bot to allow for custom attributes."""
 
     start_time: datetime
+    owners: list[int]
 
 
 logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO, force=True)
@@ -56,6 +57,9 @@ async def on_ready() -> None:
 
     bot.tree.copy_global_to(guild=MY_GUILD)
     await bot.tree.sync(guild=MY_GUILD)
+
+    for owner in await bot.application_info().team.members:
+        bot.owners.append(owner.id)
 
 
 @bot.tree.command()
