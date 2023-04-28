@@ -41,6 +41,10 @@ jobs:
         with:
             authkey: ${{ steps.auth-key.outputs.auth-key }}
 
-      - name: Test host is up
+      - name: Test hypervisor is up
         run: |
             ping -c 1 hypervisor.zebra-catfish.ts.net
+
+      - name: Test hypervisor is up
+        run: |
+            ping -c 1 10.144.95.81
