@@ -39,7 +39,8 @@ class BotBase(commands.Bot):
 logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO, force=True)
 
 intents = discord.Intents.all()
-bot = BotBase(intents=intents, command_prefix=CONFIG.prefix)
+activity = discord.Activity(type=discord.ActivityType.listening, name="URN")
+bot = BotBase(intents=intents, command_prefix=CONFIG.prefix, activity=activity)
 
 
 @bot.event
