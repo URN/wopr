@@ -15,6 +15,10 @@ class Config(BaseSettings):
 
     stats_url: str = "https://live.urn1350.net/status-json.xsl"
 
+    iqx_username: str
+    iqx_password: str
+    iqx_url: str
+
     class Config:  # noqa: D106
         env_file = ".env"
         env_prefix = "WOPR_"
