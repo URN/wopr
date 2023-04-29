@@ -16,9 +16,9 @@ jobs:
         with:
           python_version: "3.10"
 
-      - name: Run pre-commit
-        run: SKIP=ruff pre-commit run --all-files
-
       # Run ruff seperately for github formatting
       - name: Run ruff
         run: ruff check --format=github .
+
+      - name: Run pre-commit
+        run: SKIP=ruff pre-commit run --all-files
