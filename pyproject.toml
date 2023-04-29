@@ -15,6 +15,7 @@ loguru = "^0.7.0"
 humanize = "^4.6.0"
 beautifulsoup4 = "^4.12.2"
 pyfsig = "^0.6"
+requests = "^2.29.0"
 
 [tool.poetry.group.linting.dependencies]
 black = "^23.3.0"

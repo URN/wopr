@@ -26,12 +26,12 @@ class Assets(commands.GroupCog):
         if attachment.startswith("https://cdn.discordapp.com"):
             temp.write(requests.get(attachment, timeout=5).content)
             temp.close()
-            interaction.response.send_message("This is a correct link")
+            await interaction.response.send_message("This is a correct link")
 
         else:
-            interaction.response.send_message(":x: Please submit a Discord attachment link")
+            await interaction.response.send_message(":x: Please submit a Discord attachment link")
 
 
 async def setup(bot: commands.Bot) -> None:
-    """Set up the stream cog."""
+    """Set up the assets cog."""
     await bot.add_cog(Assets(bot))
