@@ -38,7 +38,7 @@ class Assets(commands.GroupCog):
 
             async with session.get(attachment) as resp:
                 with open(path, "wb") as f:
-                    async for chunk in resp.content.iter_chunked():
+                    async for chunk in resp.content.iter_chunked(1024):
                         f.write(chunk)
 
         await interaction.response.send_message(":white_check_mark: Downloaded file")
