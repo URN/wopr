@@ -19,7 +19,7 @@ class IQX(commands.GroupCog, group_name="iqx"):
 
     @app_commands.command()
     async def info(self, interaction: discord.Interaction) -> None:
-        """Retrieve statistics on the Icecast stream."""
+        """Retrieve statistics from iQx."""
         async with aiohttp.ClientSession(
             auth=aiohttp.BasicAuth(CONFIG.iqx_username, CONFIG.iqx_password)
         ) as session:
