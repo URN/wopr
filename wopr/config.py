@@ -5,15 +5,18 @@ from pydantic import BaseSettings
 class Config(BaseSettings):
     """Configuration for WOPR."""
 
+
+    xnode_ips : dict[str, str]
+
     token: str
 
     guild_id: int
 
     prefix: str = "!"
 
-    stream_url: str = "https://live.urn1350.net/listen"
+    stream_url: str = "https://live.urn1350.co.uk/listen"
 
-    stats_url: str = "https://live.urn1350.net/status-json.xsl"
+    stats_url: str = "https://live.urn1350.co.uk/status-json.xsl"
 
     iqx_username: str
     iqx_password: str

@@ -2,18 +2,19 @@
 name = "wopr"
 version = "0.1.0"
 description = ""
-authors = ["Joe Banks <joe@urn1350.net>", "Chris Lovering <chris@jb3.dev>"]
+authors = ["Joe Banks <joe@urn1350.net>", "Chris Lovering <chris@jb3.dev>", "Mark Fannon<markfannon123@outlook.com>"]
 readme = "README.md"
 packages = []
 
 [tool.poetry.dependencies]
 python = "^3.10"
-discord-py = "^2.2.2"
+discord-py = {extras = ["voice"], version = "^2.7.1"}
 pynacl = "^1.5.0"
 pydantic = {extras = ["dotenv"], version = "^1.10.7"}
 loguru = "^0.7.0"
 humanize = "^4.6.0"
 beautifulsoup4 = "^4.12.2"
+telnetlib3 = "^4.0.4"
 
 [tool.poetry.group.linting.dependencies]
 black = "^23.3.0"
