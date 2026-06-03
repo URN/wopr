@@ -129,7 +129,7 @@ class Xnode(commands.GroupCog):
 
             await interaction.response.send_message(message)
 
-        except asyncio.TimeoutError: 
+        except asyncio.TimeoutError:
             await interaction.response.send_message(":x: Connection attempt timed out")
             return
         except OSError as e:

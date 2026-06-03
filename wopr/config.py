@@ -5,7 +5,6 @@ from pydantic import BaseSettings
 class Config(BaseSettings):
     """Configuration for WOPR."""
 
-
     xnode_ips : dict[str, str]
 
     token: str
