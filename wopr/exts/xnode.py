@@ -71,7 +71,6 @@ class Xnode(commands.GroupCog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-
     @app_commands.command()
     async def get_info(
         self,
@@ -109,6 +108,7 @@ class Xnode(commands.GroupCog):
                 await interaction.response.send_message(":x: Couldn't parse response")
                 return
 
+            # Constructs us a nice 2D array of table data
             table_data = []
             for dest in parsed:
                 if dest["ADDR"] == "":
@@ -116,6 +116,7 @@ class Xnode(commands.GroupCog):
                 else:
                     parsed_address = parse_address(dest["ADDR"])
 
+                    # each row has a dest name, source subscription, IP and channel count
                     table_data.append([
                         dest["NAME"],
                         parsed_address["name"]
@@ -125,12 +126,14 @@ class Xnode(commands.GroupCog):
                         dest["NCHN"]
                     ])
 
+            # we need to make a table!
             table = tabulate(
                 table_data,
                 headers=["Destination", "Source Name", "Source IP", "No. Channels"],
                 tablefmt="simple"
             )
 
+            # final message construction
             message = (
                 f"**{xnode} XNode Destination Statuses**\n"
                 f"```text\n"
@@ -143,6 +146,7 @@ class Xnode(commands.GroupCog):
         except asyncio.TimeoutError:
             await interaction.response.send_message(":x: Connection attempt timed out")
             return
+
         except OSError as e:
             await interaction.response.send_message(f":x: Received network error: {e}")
             return

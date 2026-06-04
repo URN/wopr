@@ -34,7 +34,7 @@ class Assets(commands.GroupCog):
                     return
 
             local_filename = attachment.split("/")[-1].replace("_", " ")
-            path = os.path.join(f"/mnt/Imports/{type}/{local_filename}")
+            path = os.path.join(f"/mnt/Imports/{type}/{local_filename.split('?')[0]}")
 
             async with session.get(attachment) as resp:
                 with open(path, "wb") as f:

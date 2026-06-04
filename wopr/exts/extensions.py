@@ -16,7 +16,7 @@ class Extensions(commands.GroupCog):
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         """Check if the user is an administrator."""
-        return interaction.user.id in self.bot.owners
+        return interaction.user.id in self.bot.owners # type: ignore  # noqa: PGH003
 
     @app_commands.command()
     async def load(self, interaction: discord.Interaction, extension: str) -> None:
