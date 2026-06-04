@@ -1,7 +1,7 @@
 """Utilities for working with xnodes."""
 import discord
-from typing import Literal
-
+from typing import Literal, cast
+from tabulate import tabulate
 from discord import app_commands
 from discord.ext import commands
 import asyncio
@@ -10,7 +10,7 @@ import telnetlib3
 
 from wopr import CONFIG
 
-COMMANDS = {
+COMMANDS : dict = {
     "Destinations" : "DST"
 }
 
@@ -79,7 +79,7 @@ class Xnode(commands.GroupCog):
         xnode: Literal["CTA", "St1 Microphone", "St1 Mixed Signal"],
         command: Literal["Destinations"]
     ) -> None:
-        """Query X-Node with command and return parsed output."""
+        """Query X-Node with command and return parsed output to caller."""
         device_ip = CONFIG.xnode_ips[xnode]
 
         writer = None
@@ -90,16 +90,18 @@ class Xnode(commands.GroupCog):
                 timeout=3.0
             )
 
-            writer.write(f"{COMMANDS[command]}\n")
+            writer.write(COMMANDS[command] + "\n")
             await writer.drain()
 
             # We wait for a response and process each chunk until we get to the end
-            output = ""
+            output: str = ""
             while "END" not in output:
                 chunk = await asyncio.wait_for(reader.read(4096), timeout=3.0)
                 if not chunk:
                     break
-                output += chunk
+
+                # going to be naughty and assume we always get a string back
+                output += cast(str, chunk)
 
             #Attempt to parse the received message
             parsed = parse_dests(output)
@@ -107,25 +109,34 @@ class Xnode(commands.GroupCog):
                 await interaction.response.send_message(":x: Couldn't parse response")
                 return
 
-            message = ""
+            table_data = []
             for dest in parsed:
                 if dest["ADDR"] == "":
-                    message += f"**{dest['NAME']}** is not subscribed to anything\n"
+                    table_data.append([dest["NAME"], "-", "-", "-"])
                 else:
                     parsed_address = parse_address(dest["ADDR"])
 
-                    if parsed_address.get("name") is not None:
-                        message += (
-                            f"**{dest['NAME']}** is subscribed to **{parsed_address['name']}** "
-                            f"({parsed_address['ip']})\n"
-                        )
+                    table_data.append([
+                        dest["NAME"],
+                        parsed_address["name"]
+                            if parsed_address.get("name") is not None
+                            else "UNKNOWN",
+                        parsed_address["ip"],
+                        dest["NCHN"]
+                    ])
 
-                    else:
-                        message += (
-                            f"**{dest['NAME']}** is subscribed to **unknown source** "
-                            f"({parsed_address['ip']})\n"
-                        )
+            table = tabulate(
+                table_data,
+                headers=["Destination", "Source Name", "Source IP", "No. Channels"],
+                tablefmt="simple"
+            )
 
+            message = (
+                f"**{xnode} XNode Destination Statuses**\n"
+                f"```text\n"
+                f"{table}\n"
+                f"```"
+            )
 
             await interaction.response.send_message(message)
 
