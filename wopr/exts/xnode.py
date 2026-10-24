@@ -1,18 +1,18 @@
 """Utilities for working with xnodes."""
-import discord
-from typing import Literal, cast
-from tabulate import tabulate
-from discord import app_commands
-from discord.ext import commands
 import asyncio
 import re
+from typing import Literal, cast
+
+import discord
 import telnetlib3
+from discord import app_commands
+from discord.ext import commands
+from tabulate import tabulate
 
 from wopr import CONFIG
 
-COMMANDS : dict = {
-    "Destinations" : "DST"
-}
+COMMANDS: dict = {"Destinations": "DST"}
+
 
 def parse_address(addr: str) -> dict:
     """Parse destination subscription address into IP and friendly name components."""
@@ -22,9 +22,10 @@ def parse_address(addr: str) -> dict:
     match = re.match(pattern, addr)
 
     if match:
-        return {"ip" : match.group(1), "name" : match.group(2)}
+        return {"ip": match.group(1), "name": match.group(2)}
 
-    return {"ip" : None, "name": None}
+    return {"ip": None, "name": None}
+
 
 def parse_dests(output: str) -> list[dict[str, str]]:
     """Take a raw output string and attempt to parse with a regex, returning a list of dictionaries.
@@ -45,14 +46,14 @@ def parse_dests(output: str) -> list[dict[str, str]]:
     i = 1
     # go through each line of content
     while lines[i] != "END\r":
-        #try to find all key/value pairs
+        # try to find all key/value pairs
         matches = re.findall(pattern, lines[i].strip())
 
         dest_dict = {}
         for field in matches:
-            """ each "field" is a 3-tuple of (KEY, value1, value2)
+            """each "field" is a 3-tuple of (KEY, value1, value2)
             value1/value2 will be empty string depending on
-            the match """
+            the match"""
 
             key = field[0]
             value = field[1] if field[1] else field[2]
@@ -61,7 +62,6 @@ def parse_dests(output: str) -> list[dict[str, str]]:
         all_dests.append(dest_dict)
         i += 1
     return all_dests
-
 
 
 @app_commands.guild_only()
@@ -76,17 +76,16 @@ class Xnode(commands.GroupCog):
         self,
         interaction: discord.Interaction,
         xnode: Literal["CTA", "St1 Microphone", "St1 Mixed Signal"],
-        command: Literal["Destinations"]
+        command: Literal["Destinations"],
     ) -> None:
         """Query X-Node with command and return parsed output to caller."""
         device_ip = CONFIG.xnode_ips[xnode]
 
         writer = None
         try:
-            #Attempt to connect to device
+            # Attempt to connect to device
             reader, writer = await asyncio.wait_for(
-                telnetlib3.open_connection(device_ip, 93),
-                timeout=3.0
+                telnetlib3.open_connection(device_ip, 93), timeout=3.0
             )
 
             writer.write(COMMANDS[command] + "\n")
@@ -102,7 +101,7 @@ class Xnode(commands.GroupCog):
                 # going to be naughty and assume we always get a string back
                 output += cast(str, chunk)
 
-            #Attempt to parse the received message
+            # Attempt to parse the received message
             parsed = parse_dests(output)
             if parsed == []:
                 await interaction.response.send_message(":x: Couldn't parse response")
@@ -117,29 +116,29 @@ class Xnode(commands.GroupCog):
                     parsed_address = parse_address(dest["ADDR"])
 
                     # each row has a dest name, source subscription, IP and channel count
-                    table_data.append([
-                        dest["NAME"],
-                        parsed_address["name"]
+                    table_data.append(
+                        [
+                            dest["NAME"],
+                            parsed_address["name"]
                             if parsed_address.get("name") is not None
                             else "UNKNOWN",
-                        parsed_address["ip"],
-                        dest["NCHN"]
-                    ])
+                            parsed_address["ip"],
+                            dest["NCHN"],
+                        ]
+                    )
 
             # we need to make a table!
             table = tabulate(
                 table_data,
                 headers=["Destination", "Source Name", "Source IP", "No. Channels"],
-                tablefmt="simple"
+                tablefmt="simple",
             )
 
             # final message construction
-            message = (
-                f"**{xnode} XNode Destination Statuses**\n"
-                f"```text\n"
-                f"{table}\n"
-                f"```"
-            )
+            message = f"**{xnode} XNode Destination Statuses**\n"
+            "```text\n"
+            f"{table}\n"
+            "```"
 
             await interaction.response.send_message(message)
 
@@ -154,6 +153,7 @@ class Xnode(commands.GroupCog):
         finally:
             if writer:
                 writer.close()
+
 
 async def setup(bot: commands.Bot) -> None:
     """Set up the stream cog."""
