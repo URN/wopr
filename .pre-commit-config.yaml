@@ -18,13 +18,6 @@ repos:
         language: system
         types: [python]
         require_serial: true
-      - id: black
-        name: black
-        description: This hook runs black within our project's environment.
-        entry: poetry run black
-        language: system
-        types: [python]
-        require_serial: true
       - id: ruff
         name: ruff
         description: Run ruff linting
