@@ -67,12 +67,10 @@ class Stream(commands.GroupCog):
                 fields = {
                     "Listeners (current)": source["listeners"],
                     "Listeners (peak)": source["listener_peak"],
-                    "Bitrate": source["ice-bitrate"],
+                    "Bitrate": source["bitrate"],
                     "Stream Start": discord.utils.format_dt(stream_start, style="R"),
                     "Server Start": discord.utils.format_dt(server_start, style="R"),
                     "Server Version": data["server_id"],
-                    "Bytes Sent": humanize.naturalsize(source["total_bytes_sent"]),
-                    "Bytes Read": humanize.naturalsize(source["total_bytes_read"]),
                 }
 
                 for field, value in fields.items():

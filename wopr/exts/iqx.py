@@ -26,7 +26,7 @@ class IQX(commands.GroupCog, group_name="iqx"):
             async with session.get(CONFIG.iqx_url) as resp:
                 soup = BeautifulSoup(await resp.text(), "html.parser")
 
-                info_table = soup.findAll("table")[4]
+                info_table = soup.findAll("table")[4] # type: ignore  # noqa: PGH003
                 data = {}
                 for row in info_table.findAll("tr"):
                     data[row.findAll("td")[0].text[:-1]] = row.findAll("td")[1].text
